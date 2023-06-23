@@ -1,0 +1,51 @@
+from docx import Document
+from docx.shared import Inches
+import pandas as pd
+
+def generate_cereri(filename):
+    df = pd.read_excel("C:/Users/Dariusica/Documents/Lista-APM-Romania-1.xlsx")
+    if {'APM', 'Adresă'}.issubset(df.columns):
+        for _, row in df.iterrows():
+            judet, adresa = row['APM'], row['Adresă']
+            if pd.notnull(judet) and pd.notnull(adresa):
+                content = f'''
+Solicitare de acces la informaţii de interes public
+
+CĂTRE ADMINISTRATIA FONDULUI PENTRU MEDIU {judet}
+Adresa: {adresa}
+
+Stimată doamnă/ Stimate domn, 
+
+În conformitate cu prevederile Legii nr. 544/2001 privind liberul acces la informațiile de interes public, vă solicit să îmi puneţi la dispoziţie următoarele informaţii:
+
+_datele colectate individual, pentru fiecare UAT vizat în parte, prelucrate, după cum menţionaţi, cu ajutorul softului dedicat al AFM. 
+Vă rog să ne puneţi la dispoziţie aceste date pentru anii 2020, 2021, 2022, la nivel de UAT._____________________________________
+
+Doresc ca răspunsul să îmi fie trimis în format electronic/ în format fizic, la adresa __pogancristian@gmail.com_______________________________________________
+
+Vă rog să confirmaţi primirea prezentei solicitări şi să îmi comunicaţi numărul de înregistrare aferent la adresa de mai sus. 
+
+Vă mulţumesc!
+
+Pogan Cristian
+
+Semnătura   
+'''
+
+                file_name = f"C:/Users/Dariusica/Documents/Cerere-{judet}.docx"
+                doc = Document()
+                doc.add_paragraph(content)
+
+                # Adding the signature picture
+                signature_path = "C:/Users/Dariusica/pictures/semantura.jfif"
+                doc.add_picture(signature_path, width=Inches(1.5))
+
+                doc.save(file_name)
+                print(f"Word file saved successfully at '{file_name}'.")
+                print(content)
+                print()
+    else:
+        print("Invalid data columns.")
+
+filename = "C:/Users/Dariusica/Documents/Lista-APM-Romania-1.xlsx"
+generate_cereri(filename)
